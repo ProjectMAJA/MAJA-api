@@ -50,16 +50,14 @@ class User {
 
             if(rows[0]){
                 if(this.password === rows[0].password){
-                    console.log(rows[0]);
-                    const token = jwt.sign({
-                        id: rows[0].id,
-                        isadmin: rows[0].isadmin
-                    }, process.env.SECRET, { expiresIn: '24 hours' })
+                    const access_token = jwt.sign(rows[0], process.env.SECRET, { expiresIn: '60s' });
+
+                    const refresh_token = jwt.sign(rows[0], process.env.REFRESH_SECRET, { expiresIn: '1y' })
                     
                     return {
-                        pseudo: rows[0].pseudo,
-                        isadmin: rows[0].isadmin,
-                        access_token: token 
+                        isadmin : rows[0].isadmin,
+                        access_token,
+                        refresh_token
                     }
                 }else{
                     throw new Error('Wrong password');
@@ -89,6 +87,32 @@ class User {
         } catch (error) {
             throw error;
         }
+    }
+
+    async newToken(){
+        const queryDb = {
+            text: `SELECT * FROM "user" WHERE id=$1`,
+            values: [this.id]
+        };
+
+        try {
+            const {rows} = await client.query(queryDb);
+            
+            if(!rows[0]){
+                throw new Error('User no longer exist')
+            }
+
+            if(rows[0].pseudo === this.pseudo && rows[0].password === this.password && rows[0].email === this.email && rows[0].isadmin === this.isadmin && rows[0].avatar === this.avatar){
+                const access_token = jwt.sign(rows[0], process.env.SECRET, { expiresIn: '24 hours' });
+                return {
+                    isadmin: rows[0].isadmin,
+                    access_token
+                }
+            }
+        } catch (error) {
+            throw error;
+        }
+
     }
 }
 

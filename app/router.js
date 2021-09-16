@@ -11,7 +11,9 @@ const router = Router();
 
 //############# USER Routes #################
 router.get('/users', authLog, userCtrl.getAll);
-router.get('/user', authLog, userCtrl.getOne);
+router.get('/user', authLog, userCtrl.sendUser);
+
+router.get('/refreshToken', authLog, userCtrl.refreshToken)
 
 router.post('/login', userCtrl.login);
 router.post('/user', checkLog, userCtrl.save);

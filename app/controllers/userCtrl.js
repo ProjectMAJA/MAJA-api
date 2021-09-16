@@ -26,6 +26,26 @@ const userCtrl = {
         }
     },
 
+    sendUser: (req,res,next) =>{
+        delete req.userLogged.iat;
+        delete req.userLogged.exp;
+        res.json(req.userLogged);
+    },
+
+    refreshToken: async (req,res,next)=>{
+        if(req.userRefreshToken){
+            const user = new User(req.userRefreshToken)
+            try {
+                const result = await user.newToken();
+                res.json(result);
+            } catch (error) {
+                res.status(500).json(error.message);
+            }
+        }else{
+            res.status(401).json('This token is not a refresh_token');
+        }
+    },
+
     //Connexion au site avec récupération d'un token
     login: async (req,res,next)=>{
         if ((!req.body.pseudo && !req.body.email) || !req.body.password) {
@@ -62,7 +82,7 @@ const userCtrl = {
                 throw new Error('This user is not allowed to delete this account');
             }
             if(id === 1){
-                throw new Error('This user can be delete');
+                throw new Error('This user can\'t be delete');
             }
             await User.delete(id);
 

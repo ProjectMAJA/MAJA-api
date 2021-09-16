@@ -11,7 +11,7 @@ const extractBearerToken = headerValue => {
 }
 
 /* Vérification du token */
-const authLog = (req, res, next) => {
+const checkLog = (req, res, next) => {
     // Récupération du token
     const token = req.headers.authorization && extractBearerToken(req.headers.authorization)
 
@@ -27,4 +27,4 @@ const authLog = (req, res, next) => {
     })
 }
 
-module.exports = authLog;
+module.exports = checkLog;
