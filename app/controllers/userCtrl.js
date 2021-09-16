@@ -49,14 +49,14 @@ const userCtrl = {
     //Connexion au site avec récupération d'un token
     login: async (req,res,next)=>{
         if ((!req.body.pseudo && !req.body.email) || !req.body.password) {
-            res.status(400).json({ message: 'Error. Please enter the correct username and password' })
+            res.status(401).json({ message: 'Error. Please enter the correct username and password' })
         }
         const user = new User(req.body);
         try {
             const result = await user.login();
             res.json(result);
         } catch (error) {
-            res.status(500).json(error.message);
+            res.status(401).json(error.message);
         }
     },
 
@@ -70,7 +70,7 @@ const userCtrl = {
             const result = await user.save();
             res.json(result);
         } catch (error) {
-            res.status(500).json(error.message);
+            res.status(401).json(error.message);
         }
     },
 
@@ -88,7 +88,7 @@ const userCtrl = {
 
             res.json(`User ${id} has been deleted`)            
         } catch (error) {
-            res.status(500).json(error.message);
+            res.status(401).json(error.message);
         }
     }
 }

@@ -103,7 +103,7 @@ class User {
             }
 
             if(rows[0].pseudo === this.pseudo && rows[0].password === this.password && rows[0].email === this.email && rows[0].isadmin === this.isadmin && rows[0].avatar === this.avatar){
-                const access_token = jwt.sign(rows[0], process.env.SECRET, { expiresIn: '24 hours' });
+                const access_token = jwt.sign(rows[0], process.env.SECRET, { expiresIn: '60s' });
                 return {
                     isadmin: rows[0].isadmin,
                     access_token
