@@ -6,8 +6,8 @@ class Game {
      constructor(obj={}) {
         for (const propName in obj) {
             this[propName] = obj[propName];
-        }
-    }
+        };
+    };
 
     async save(){
         const queryDb = setQuerySave(this, 'game');
@@ -17,8 +17,8 @@ class Game {
             return true;
         } catch (error) {
             throw error;
-        }
-    }
-}      
+        };
+    };
+};
 
 module.exports = Game;
