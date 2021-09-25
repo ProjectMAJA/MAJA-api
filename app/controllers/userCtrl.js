@@ -49,14 +49,14 @@ const userCtrl = {
     //Connexion au site avec récupération d'un token
     login: async (req, res, next) => {
         if ((!req.body.pseudo && !req.body.email) || !req.body.password) {
-            res.status(401).json({ message: 'Error. Please enter the correct username and password' });
+            res.status(401).json({ message: 'Error. Please enter a username/email and a password' });
         };
         const user = new User(req.body);
         try {
             const result = await user.login();
             res.json(result);
-        } catch (error) {
-            res.status(401).json(error.message);
+        } catch (err) {
+            res.status(401).json(err);
         };
     },
 
@@ -66,6 +66,7 @@ const userCtrl = {
             req.body.id = req.userLogged.id;
         };
         const user = new User(req.body);
+        console.log(user);
         try {
             const result = await user.save();
             res.json(result);

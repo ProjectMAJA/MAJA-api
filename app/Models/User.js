@@ -74,17 +74,10 @@ class User {
         const queryDb = setQuerySave(this, 'user');
         try {
             const {rows} = await client.query(queryDb);
-            const access_token = jwt.sign({
-                id: rows[0].id,
-                isadmin: rows[0].isadmin
-            }, process.env.SECRET, { expiresIn: '1800s' });
-            const refresh_token = jwt.sign({
-                id: rows[0].id,
-                isadmin: rows[0].isadmin
-            }, process.env.REFRESH_SECRET, { expiresIn: '1y' });
+            const access_token = jwt.sign(rows[0], process.env.SECRET, { expiresIn: '1800s' });
+            const refresh_token = jwt.sign(rows[0], process.env.REFRESH_SECRET, { expiresIn: '1y' });
             
             return {
-                pseudo: rows[0].pseudo,
                 isadmin: rows[0].isadmin,
                 access_token,
                 refresh_token
